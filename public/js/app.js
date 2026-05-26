@@ -75,7 +75,7 @@ async function verificarSesion() {
 function mostrarUIUsuario(usuario) {
     document.getElementById('loginCard').style.display = 'none';
     document.getElementById('userInfo').style.display = 'block';
-    document.getElementById('nombreUsuario'). Content = usuario.nombre;
+    document.getElementById('nombreUsuario').textContent = usuario.nombre;
     document.getElementById('gestionLibros').style.display = 'block';
 }
 

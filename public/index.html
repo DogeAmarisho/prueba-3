@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +20,7 @@ html
                 <form id="loginForm">
                     <div class="form-group">
                         <label for="usuario">Usuario:</label>
-                        <input type=" " id="usuario" placeholder="admin" required>
+                        <input type="text" id="usuario" placeholder="admin" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Contraseña:</label>
@@ -29,7 +28,7 @@ html
                     </div>
                     <button type="submit" class="btn-primary">Iniciar Sesión</button>
                 </form>
-                <p class="info- ">📝 Usuario: <strong>admin</strong> (cualquier contraseña)</p>
+                <p class="info-text">📝 Usuario: <strong>admin</strong> (cualquier contraseña)</p>
             </div>
             <div id="userInfo" style="display: none;">
                 <div class="card user-card">
@@ -41,19 +40,19 @@ html
 
         <!-- Sección de gestión de libros (requiere login) -->
         <div id="gestionLibros" style="display: none;">
-            
+
             <!-- Formulario para crear libro -->
             <div class="card">
                 <h2>➕ Agregar Nuevo Libro</h2>
                 <form id="libroForm">
                     <div class="form-group">
                         <label for="titulo">Título *:</label>
-                        <input type=" " id="titulo" required>
+                        <input type="text" id="titulo" required>
                         <small class="error-msg" id="error-titulo"></small>
                     </div>
                     <div class="form-group">
                         <label for="autor">Autor *:</label>
-                        <input type=" " id="autor" required>
+                        <input type="text" id="autor" required>
                         <small class="error-msg" id="error-autor"></small>
                     </div>
                     <div class="form-group">
@@ -63,7 +62,7 @@ html
                     </div>
                     <div class="form-group">
                         <label for="genero">Género *:</label>
-                        <input type=" " id="genero" required>
+                        <input type="text" id="genero" required>
                         <small class="error-msg" id="error-genero"></small>
                     </div>
                     <div class="form-group">
@@ -79,7 +78,7 @@ html
             <!-- Botón para recargar lista -->
             <div class="toolbar">
                 <button id="recargarBtn" class="btn-secondary">🔄 Recargar Lista</button>
-                <input type=" " id="searchInput" placeholder="🔍 Buscar por título o autor..." class="search-input">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar por título o autor..." class="search-input">
             </div>
 
             <!-- Lista de libros -->

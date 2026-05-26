@@ -4,9 +4,9 @@
   "description": "��#\u0000 \u0000p\u0000r\u0000u\u0000e\u0000b\u0000a\u0000-\u00003\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-  "start": "node server.js",
-  "dev": "nodemon server.js"
-},
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DogeAmarisho/prueba-3.git"
@@ -23,6 +23,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "mysql2": "^3.22.3"
   },
   "devDependencies": {

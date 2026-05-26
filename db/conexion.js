@@ -14,7 +14,7 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,     // Usuario (por defecto 'root')
     password: process.env.DB_PASSWORD, // Contraseña (vacía por defecto en XAMPP)
     database: process.env.DB_NAME, // 'biblioteca_db'
-    port: 3306,                    // Puerto por defecto de MySQL
+    port: process.env.DB_PORT || 3306, // Puerto MySQL (XAMPP usa 3307)
     waitForConnections: true,      // Espera si no hay conexiones disponibles
     connectionLimit: 10,           // Máximo 10 conexiones simultáneas
     queueLimit: 0                  // Sin límite de peticiones en cola
