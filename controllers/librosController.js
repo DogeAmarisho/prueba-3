@@ -4,16 +4,9 @@
 // ============================================================
 
 const LibroModel = require('../models/libroModel');
+const LibroService = require('../services/libroService'); // NUEVO
 
-// Expresiones regulares para validaciones
-const PATRONES = {
-    // Letras, espacios y tildes, mínimo 2 caracteres
-    texto: /^[a-zA-ZáéíóúñÑ\s]{2,150}$/,
-    // Números entre 1000 y 2026 (años de publicación válidos)
-    anio: /^(1[0-9]{3}|20[0-2][0-6])$/,
-    // Letras y espacios para género
-    genero: /^[a-zA-ZáéíóúñÑ\s]{3,50}$/
-};
+
 
 /**
  * CONTROLADOR: Listar todos los libros
@@ -21,15 +14,14 @@ const PATRONES = {
  */
 async function listarLibros(req, res) {
     try {
-        // Verificar si hay parámetro de búsqueda
-        const { buscar: terminoBusqueda } = req.query;
+        // La rúbrica exige el parámetro ?nombre=
+        const { nombre } = req.query;
 
         let libros;
-        if (terminoBusqueda && terminoBusqueda.trim() !== '') {
-            // Hay término de búsqueda
-            libros = await LibroModel.buscar(terminoBusqueda);
+        if (nombre && nombre.trim() !== '') {
+            // Reutilizamos tu método buscar del modelo
+            libros = await LibroModel.buscar(nombre.trim());
         } else {
-            // Listar todos
             libros = await LibroModel.obtenerTodos();
         }
 
@@ -41,11 +33,7 @@ async function listarLibros(req, res) {
 
     } catch (error) {
         console.error('Error en listarLibros:', error.message);
-        res.status(500).json({
-            ok: false,
-            mensaje: 'Error interno del servidor',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        res.status(500).json({ ok: false, mensaje: 'Error interno del servidor' });
     }
 }
 
@@ -95,58 +83,18 @@ async function obtenerLibro(req, res) {
  */
 async function crearLibro(req, res) {
     try {
-        const { titulo, autor, anio_publicacion, genero, disponible } = req.body;
-
-        // ============================================================
-        // VALIDACIONES - Capa de negocio
-        // ============================================================
-
-        // 1. Validar campos obligatorios
-        const errores = [];
-
-        if (!titulo || titulo.trim() === '') {
-            errores.push('El título es obligatorio');
-        } else if (!PATRONES.texto.test(titulo)) {
-            errores.push('El título debe tener entre 2 y 150 caracteres (solo letras y espacios)');
+        // 1. Validar con el service
+        const { valido, error } = LibroService.validarDatos(req.body);
+        if (!valido) {
+            return res.status(400).json({ ok: false, mensaje: error });
         }
 
-        if (!autor || autor.trim() === '') {
-            errores.push('El autor es obligatorio');
-        } else if (!PATRONES.texto.test(autor)) {
-            errores.push('El autor debe tener entre 2 y 150 caracteres (solo letras y espacios)');
-        }
+        // 2. Normalizar con el service
+        const datosSeguros = LibroService.prepararItem(req.body);
 
-        if (!anio_publicacion) {
-            errores.push('El año de publicación es obligatorio');
-        } else if (!PATRONES.anio.test(anio_publicacion.toString())) {
-            errores.push('El año debe ser entre 1000 y 2026');
-        }
+        // 3. Crear en la base de datos
+        const nuevoLibro = await LibroModel.crear(datosSeguros);
 
-        if (!genero || genero.trim() === '') {
-            errores.push('El género es obligatorio');
-        } else if (!PATRONES.genero.test(genero)) {
-            errores.push('El género debe tener entre 3 y 50 caracteres');
-        }
-
-        // Si hay errores, responder con código 400
-        if (errores.length > 0) {
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'Error de validación',
-                errores: errores
-            });
-        }
-
-        // 2. Crear el libro en la base de datos
-        const nuevoLibro = await LibroModel.crear({
-            titulo: titulo.trim(),
-            autor: autor.trim(),
-            anio_publicacion: parseInt(anio_publicacion),
-            genero: genero.trim(),
-            disponible: disponible !== undefined ? disponible : true
-        });
-
-        // 3. Responder con código 201 (Created)
         res.status(201).json({
             ok: true,
             mensaje: 'Libro creado exitosamente',
@@ -155,10 +103,7 @@ async function crearLibro(req, res) {
 
     } catch (error) {
         console.error('Error en crearLibro:', error.message);
-        res.status(500).json({
-            ok: false,
-            mensaje: 'Error interno del servidor'
-        });
+        res.status(500).json({ ok: false, mensaje: 'Error interno del servidor' });
     }
 }
 

@@ -158,7 +158,10 @@ async function crearLibro(libroData) {
     try {
         const response = await fetch(API_BASE, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': 'eval-s12-2024' // <-- Enviamos la clave requerida por el backend
+            },
             body: JSON.stringify(libroData)
         });
         
@@ -181,7 +184,10 @@ async function actualizarLibro(id, libroData) {
     try {
         const response = await fetch(`${API_BASE}/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': 'eval-s12-2024' // <-- Enviamos la clave requerida por el backend
+            },
             body: JSON.stringify(libroData)
         });
         
@@ -204,7 +210,10 @@ async function eliminarLibro(id) {
     
     try {
         const response = await fetch(`${API_BASE}/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'x-api-key': 'eval-s12-2024' // <-- Enviamos la clave requerida por el backend
+            }
         });
         
         const data = await response.json();
